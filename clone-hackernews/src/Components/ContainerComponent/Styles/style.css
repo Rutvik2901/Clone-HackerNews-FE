@@ -1,0 +1,42 @@
+.posts {
+    margin-top: 0px !important;
+    width: 100%;
+}
+
+.cardExtra {
+    min-height: auto !important;
+}
+.postContent {
+    max-height: 400px;
+    overflow: hidden;
+}
+.cardContent {
+    max-height: 70%;
+    overflow-y: auto;
+    text-align: justify;
+}
+
+.actionButtons:hover {
+    background-color: transparent;
+}
+
+.actionButtons {
+    background-color: transparent !important;
+    display: flex !important;
+    justify-content: center;
+}
+
+.description {
+    word-break: break-all;
+}
+
+.votes {
+    margin: 0px !important;
+    margin-right: 0.25em !important;
+    display: flex !important;
+    align-items: center;
+}
+
+.container {
+    margin: 0px!important;
+}
