@@ -22,22 +22,20 @@ class ModalComponent extends Component<ICreatePostModalProps, ICreatePostModalSt
     const { open } = this.props;
 
     return (
-      <>
-        <Modal dimmer="blurring" open={open} onClose={this.props.modalClose}>
-          <Modal.Header>Enter Details</Modal.Header>
-          <Modal.Content>
-            <Form>{this.props.children}</Form>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button secondary onClick={this.props.modalClose}>
-              Cancel
-            </Button>
-            <Button primary onClick={this.submitForm}>
-              Submit
-            </Button>
-          </Modal.Actions>
-        </Modal>
-      </>
+      <Modal dimmer="blurring" open={open} onClose={this.props.modalClose}>
+        <Modal.Header>Enter Details</Modal.Header>
+        <Modal.Content>
+          <Form>{this.props.children}</Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button secondary onClick={this.props.modalClose}>
+            Cancel
+          </Button>
+          <Button primary onClick={this.submitForm}>
+            Submit
+          </Button>
+        </Modal.Actions>
+      </Modal>
     );
   }
 }

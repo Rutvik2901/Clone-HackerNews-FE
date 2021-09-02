@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Container, Dimmer, Icon, Label, Loader } from "semantic-ui-react";
 import { baseUrl } from "Constants/baseUrl";
-import { getLabelBasedOnTime, millisToMinutesAndSeconds } from "Constants/Methods/millisecondsToMinutesSeconds";
+import { millisToHoursAndMinutesAndSeconds } from "Constants/Methods/millisecondsToHoursMinutesSeconds";
 import PostModel from "Constants/Models/PostModel";
 import { addPosts } from "redux/actions";
 import store from "redux/store";
-import "./Styles/style.css";
+import "Components/ContainerComponent/Styles/index.css";
 
 interface IContainerComponentProps {}
 interface IContainerComponentState {
@@ -61,6 +61,7 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
 
   render() {
     const { posts, loading } = this.state;
+    const currentDate = Date.parse(new Date().toUTCString());
     return (
       <>
         {loading && (
@@ -71,8 +72,8 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
         <Container>
           <Card.Group id="posts">
             {posts &&
-              posts.map((post: PostModel, index: number) => (
-                <Card className="postContent">
+              posts.map((post: PostModel) => (
+                <Card raised className="postContent">
                   <Card.Content className="cardContent" href={post.url}>
                     <Card.Header>{post.title}</Card.Header>
                     <Card.Meta>{post.url}</Card.Meta>
@@ -81,7 +82,7 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
                   <Card.Content id="cardExtra" extra>
                     <Button id="actionButtons" as="div">
                       <Button onClick={() => this.likePost(post.id)} color="facebook">
-                        <Icon name="thumbs up" />
+                        <Icon style={{ margin: 0 }} name="thumbs up" />
                       </Button>
 
                       <Label id="votes" basic color="blue">
@@ -89,12 +90,11 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
                       </Label>
 
                       <Button onClick={() => this.dislikePost(post.id)} color="facebook">
-                        <Icon name="thumbs down" />
+                        <Icon name="thumbs down" style={{ margin: 0 }} />
                       </Button>
                     </Button>
                     <div>
-                      Created {millisToMinutesAndSeconds(Date.parse(new Date().toUTCString()) - Date.parse(post.createdAt))}{" "}
-                      {getLabelBasedOnTime(Date.parse(new Date().toUTCString()) - Date.parse(post.createdAt))} ago By {post.author.length ? post.author : "Annonymous"}{" "}
+                      Created {millisToHoursAndMinutesAndSeconds(currentDate - Date.parse(post.createdAt ? post.createdAt : ""))} ago By {post.author.length ? post.author : "Annonymous"}{" "}
                       <Link style={{ textDecoration: "underline" }} to={{ pathname: `/comment/post/${post.id}`, state: { post } }}>
                         Discuss
                       </Link>

@@ -7,7 +7,7 @@
     min-height: auto;
 }
 .postContent {
-    max-height: 400px;
+    height: 400px;
     overflow: hidden;
 }
 .cardContent {

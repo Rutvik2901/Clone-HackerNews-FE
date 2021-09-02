@@ -9,5 +9,5 @@ export default interface PostModel {
   votes: number;
   url: string;
   comment?: CommentModel;
-  createdAt?: any;
+  createdAt?: string;
 }
