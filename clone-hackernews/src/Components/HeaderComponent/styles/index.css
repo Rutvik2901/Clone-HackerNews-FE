@@ -1,0 +1,10 @@
+.headerRoot {
+  display: flex;
+  flex: 100%;
+  justify-content: center;
+  margin: 0.875em 5px 0px 5px;
+}
+
+.buttons {
+  padding-right: 0px;
+}

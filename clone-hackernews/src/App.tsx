@@ -1,24 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import "semantic-ui-css/semantic.min.css";
+import "App.css";
+import CommentComponent from "Components/CommentComponent";
+import HomeComponent from "Components/HomeComponent";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Route exact path="/" component={HomeComponent} />
+        <Route exact path="/comment/post/:id" render={(props) => <CommentComponent {...props} id={props.match.params.id} />} />
+      </BrowserRouter>
     </div>
   );
 }
