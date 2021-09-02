@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Container, Dimmer, Icon, Label, Loader } from "semantic-ui-react";
-import { baseUrl } from "../../Constants/baseUrl";
-import { getLabelBasedOnTime, millisToMinutesAndSeconds } from "../../Constants/Methods/millisecondsToMinutesSeconds";
-import PostModel from "../../Constants/Models/PostModel";
-import { addPosts } from "../../redux/actions";
-import store from "../../redux/store";
+import { baseUrl } from "Constants/baseUrl";
+import { getLabelBasedOnTime, millisToMinutesAndSeconds } from "Constants/Methods/millisecondsToMinutesSeconds";
+import PostModel from "Constants/Models/PostModel";
+import { addPosts } from "redux/actions";
+import store from "redux/store";
 import "./Styles/style.css";
 
 interface IContainerComponentProps {}
@@ -63,15 +63,13 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
     const { posts, loading } = this.state;
     return (
       <>
-        {loading ? (
+        {loading && (
           <Dimmer active>
             <Loader size="large">Getting Data</Loader>
           </Dimmer>
-        ) : (
-          <></>
         )}
         <Container>
-          <Card.Group className="posts">
+          <Card.Group id="posts">
             {posts &&
               posts.map((post: PostModel, index: number) => (
                 <Card className="postContent">
@@ -80,13 +78,13 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
                     <Card.Meta>{post.url}</Card.Meta>
                     <Card.Description className="description">{post.description}</Card.Description>
                   </Card.Content>
-                  <Card.Content className="cardExtra" extra>
-                    <Button className="actionButtons" as="div">
+                  <Card.Content id="cardExtra" extra>
+                    <Button id="actionButtons" as="div">
                       <Button onClick={() => this.likePost(post.id)} color="facebook">
                         <Icon name="thumbs up" />
                       </Button>
 
-                      <Label className={"votes"} basic color="blue">
+                      <Label id="votes" basic color="blue">
                         {post.votes}
                       </Label>
 

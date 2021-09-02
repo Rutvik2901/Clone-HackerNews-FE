@@ -1,17 +1,18 @@
 import { debounce, toLower } from "lodash";
 import React, { Component } from "react";
 import { Button, Form, Grid, Search } from "semantic-ui-react";
-import { baseUrl } from "../../Constants/baseUrl";
-import PostModel from "../../Constants/Models/PostModel";
-import { addPosts, doneSearch, postSearch } from "../../redux/actions";
-import store from "../../redux/store";
-import ModalComponent from "../ModalComponent";
-import "./styles/index.css";
+import { baseUrl } from "Constants/baseUrl";
+import PostModel from "Constants/Models/PostModel";
+import { addPosts, doneSearch, postSearch } from "redux/actions";
+import store from "redux/store";
+import ModalComponent from "Components/ModalComponent";
+import "Components/HeaderComponent/styles/index.css";
 
 interface IHeaderComponentProps {}
 interface IHeaderComponentState {
   loading: boolean;
   postModel: PostModel;
+  modal: boolean;
 }
 
 class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentState> {
@@ -20,6 +21,7 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
     this.state = {
       loading: false,
       postModel: { title: "", description: "", author: "", url: "", votes: 0 },
+      modal: false,
     };
   }
 
@@ -35,6 +37,9 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
 
   private onSubmit = () => {
     const { postModel } = this.state;
+    if (postModel.author.length === 0) {
+      postModel.author = "Annonymous";
+    }
     fetch(baseUrl + "/post", {
       method: "POST",
       mode: "cors",
@@ -45,7 +50,10 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
     }).then(() => {
       fetch(baseUrl + "/post")
         .then((res) => res.json())
-        .then((res) => store.dispatch(addPosts(res)));
+        .then((res) => {
+          store.dispatch(addPosts(res));
+          this.closeModal();
+        });
     });
   };
 
@@ -69,6 +77,18 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
     });
   };
 
+  openModal = () => {
+    this.setState({
+      modal: true,
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modal: false,
+    });
+  };
+
   render() {
     const { loading } = this.state;
     return (
@@ -79,14 +99,17 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
         <Button>
           <Button.Content>Old</Button.Content>
         </Button>
-        <ModalComponent content={"Make a new Post"} onSubmit={this.onSubmit}>
+        <Button onClick={this.openModal}>
+          <Button.Content>Make a new Post</Button.Content>
+        </Button>
+        <ModalComponent onSubmit={this.onSubmit} modalClose={this.closeModal} open={this.state.modal}>
           <Form.Group widths={2}>
-            <Form.Input id="title" onChange={(event: any) => this.handleValueChange(event)} label="Title" placeholder="Enter Title" />
-            <Form.Input id="url" onChange={(event: any) => this.handleValueChange(event)} label="Url" placeholder="Enter Url" />
+            <Form.Input id="title" onChange={this.handleValueChange} label="Title" placeholder="Enter Title" />
+            <Form.Input id="url" onChange={this.handleValueChange} label="Url" placeholder="Enter Url" />
           </Form.Group>
           <Form.Group widths={2}>
-            <Form.TextArea id="description" onChange={(event: any) => this.handleValueChange(event)} label="Description" placeholder="Enter Description" />
-            <Form.Input id="author" onChange={(event: any) => this.handleValueChange(event)} label="Author" placeholder="Enter Author" />
+            <Form.TextArea id="description" onChange={this.handleValueChange} label="Description" placeholder="Enter Description" />
+            <Form.Input id="author" onChange={this.handleValueChange} label="Author" placeholder="Enter Author" />
           </Form.Group>
         </ModalComponent>
         <Grid>

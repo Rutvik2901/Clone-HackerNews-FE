@@ -1,50 +1,35 @@
 import React, { Component } from "react";
 import { Button, Form, Modal } from "semantic-ui-react";
 
-interface ICreatePostModalState {
-  openModal: boolean;
-}
+interface ICreatePostModalState {}
 interface ICreatePostModalProps {
   onSubmit: () => void;
-  content: string;
+  open: boolean;
+  modalClose: () => void;
 }
 
 class ModalComponent extends Component<ICreatePostModalProps, ICreatePostModalState> {
   constructor(props: ICreatePostModalProps) {
     super(props);
-    this.state = {
-      openModal: false,
-    };
+    this.state = {};
   }
 
-  private closeModal = () => {
-    this.setState({ openModal: false });
-  };
-  private handleModal = () => {
-    this.setState({ openModal: true });
-  };
-
   private submitForm = () => {
-    this.closeModal();
     this.props.onSubmit();
   };
 
   render() {
-    const { openModal } = this.state;
-    const { content } = this.props;
+    const { open } = this.props;
 
     return (
       <>
-        <Button onClick={this.handleModal}>
-          <Button.Content>{content}</Button.Content>
-        </Button>
-        <Modal dimmer="blurring" open={openModal} onClose={this.closeModal}>
+        <Modal dimmer="blurring" open={open} onClose={this.props.modalClose}>
           <Modal.Header>Enter Details</Modal.Header>
           <Modal.Content>
             <Form>{this.props.children}</Form>
           </Modal.Content>
           <Modal.Actions>
-            <Button secondary onClick={this.closeModal}>
+            <Button secondary onClick={this.props.modalClose}>
               Cancel
             </Button>
             <Button primary onClick={this.submitForm}>

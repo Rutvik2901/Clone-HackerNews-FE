@@ -1,5 +1,5 @@
 import React from "react";
-import CommentModel from "./CommentModel";
+import CommentModel from "Constants/Models/CommentModel";
 
 export default interface PostModel {
   id?: string;

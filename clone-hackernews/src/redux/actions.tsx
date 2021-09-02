@@ -1,4 +1,4 @@
-import PostModel from "../Constants/Models/PostModel";
+import PostModel from "Constants/Models/PostModel";
 export const addPosts = (content: Array<PostModel>) => ({
   type: "ADD_POST",
   payload: {

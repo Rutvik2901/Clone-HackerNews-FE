@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ContainerComponent from "../ContainerComponent";
-import HeaderComponent from "../HeaderComponent";
+import ContainerComponent from "Components/ContainerComponent";
+import HeaderComponent from "Components/HeaderComponent";
 
 interface IHomeComponentProps {}
 interface IHomeComponentState {}

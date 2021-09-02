@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
-import "./App.css";
-import CommentComponent from "./Components/CommentComponent";
-import HomeComponent from "./Components/HomeComponent";
+import "App.css";
+import CommentComponent from "Components/CommentComponent";
+import HomeComponent from "Components/HomeComponent";
 
 function App() {
   return (
