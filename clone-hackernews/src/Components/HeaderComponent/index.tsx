@@ -1,17 +1,17 @@
+import { debounce, toLower } from "lodash";
 import React, { Component } from "react";
-import { Button, Form, Grid, Header, Search, Segment } from "semantic-ui-react";
-import { PostModelPost } from "../../Constants/Models/PostModel";
+import { Button, Form, Grid, Search } from "semantic-ui-react";
+import { baseUrl } from "../../Constants/baseUrl";
+import PostModel from "../../Constants/Models/PostModel";
+import { addPosts, doneSearch, postSearch } from "../../redux/actions";
+import store from "../../redux/store";
 import ModalComponent from "../ModalComponent";
 import "./styles/index.css";
-import store from "../../redux/store";
-import { addPosts, doneSearch, postSearch } from "../../redux/actions";
-import { baseUrl } from "../../Constants/baseUrl";
-import { debounce, toLower, toUpper } from "lodash";
 
 interface IHeaderComponentProps {}
 interface IHeaderComponentState {
   loading: boolean;
-  postModel: PostModelPost;
+  postModel: PostModel;
 }
 
 class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentState> {
