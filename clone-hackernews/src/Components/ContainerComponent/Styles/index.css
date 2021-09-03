@@ -1,6 +1,15 @@
 #posts {
-    margin-top: 10px;
     width: 100%;
+    margin-bottom: 0px;
+    margin-top: 10px;
+}
+
+#grid > div {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 90%;
 }
 
 #cardExtra {
@@ -10,10 +19,11 @@
     height: 400px;
     overflow: hidden;
 }
-.cardContent {
+#cardContent {
     max-height: 70%;
-    overflow-y: auto;
+    overflow: hidden;
     text-align: justify;
+    padding-right: 0px;
 }
 
 #actionButtons:hover {
@@ -26,8 +36,29 @@
     justify-content: center;
 }
 
+#actionButtons > Button{
+    box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.20), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12); 
+background-color: transparent;}
+
+#likeButtonColor{
+    color: #28a745;
+    margin: 0;
+}
+#likeButton:hover{
+    background-color: rgba(40,167,69,.125);
+}
+#dislikeButton:hover{
+    background-color: rgba(255, 7, 58, 0.125);
+}
+#dislikeButtonColor{
+    color: #ff073a;
+    margin: 0;
+}
 .description {
-    word-break: break-all;
+    word-break: break-word;
+    max-height: 80%;
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 #votes {
@@ -35,4 +66,40 @@
     margin-right: 0.25em;
     display: flex;
     align-items: center;
+    box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.20), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12); 
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+}
+#votes:hover {
+    background-color: rgba(0, 123, 255, 0.125);
+}
+
+.ui.card>.content>a.header.cardFontColor,.cardFontColor,.ui.card>.extra a:not(.ui).cardFontColor,.ui.card>.content>.description.cardFontColor,.ui.card>.content>.header:not(.ui).cardFontColor{
+    color: #6c757d;
+}
+.link {
+    text-decoration: underline;
+}
+#authorOverflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+abbr[title] {
+    text-decoration: none;
+}
+
+.ui.card>.content>a.header.cardUrl {
+    font-weight: 100;
+    font-size: 1em;
+}
+
+.cardContent {
+    padding-right: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-height: 10%;
 }

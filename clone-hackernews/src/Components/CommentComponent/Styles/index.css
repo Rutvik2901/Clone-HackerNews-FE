@@ -1,0 +1,83 @@
+.textarea{
+    width: 80%;
+    margin-top: 20px;
+}
+
+.postRoot{
+    flex: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.ui.feed>.event:last-child>.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ui.feed>.event>.content .summary {
+    max-width: 80%;
+}
+
+.ui.feed>.event>.content .extra.text.feedExtra {
+    max-width: 80%;
+    text-align: justify;
+    color: #6c757d;
+}
+
+#submitButton {
+    margin-top: 10px;    
+}
+
+.textButton {
+    text-align: start;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+}
+
+#container {
+    margin: 0px;
+}
+
+.commentTitle {
+    font-size: 18px;
+    color: #007bff;
+}
+
+#commentGroup {
+    text-align: center;
+    margin-bottom: 20px;
+    min-width: 80%;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#rootComment{
+    margin-top: 20px;
+    text-align: left;
+}
+
+#comment{
+    background: transparent;
+    font-weight: bold;
+    color: rgb(108, 117, 125);
+    box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.2), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12);
+    
+}
+
+.ui.feed>.event>.content .user.feedUser, .ui.feed>.event>.content .summary>.date.feedDate,
+.ui.comments .comment a.author.commentAuthor,.ui.comments .comment .metadata.commentMeta,.ui.comments .comment .text.commentText, .ui.comments .comment .actions a.commentAction{
+    color: #6c757d;
+}
+
+#commentHeader {
+    color: #6c757d;
+}
+.ui.dividing.header {
+    border-bottom: 1px solid #6c757d;
+}

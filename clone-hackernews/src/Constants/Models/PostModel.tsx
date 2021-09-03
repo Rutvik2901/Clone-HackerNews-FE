@@ -8,6 +8,6 @@ export default interface PostModel {
   author: string;
   votes: number;
   url: string;
-  comment?: CommentModel;
+  comment?: Array<CommentModel>;
   createdAt?: string;
 }
