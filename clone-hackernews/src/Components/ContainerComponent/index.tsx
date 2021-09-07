@@ -3,7 +3,7 @@ import { baseUrl } from "Constants/baseUrl";
 import { millisToHoursAndMinutesAndSeconds } from "Constants/Methods/millisecondsToHoursMinutesSeconds";
 import PostModel from "Constants/Models/PostModel";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { addPosts } from "redux/actions";
 import store from "redux/store";
 import { Button, Card, Dimmer, Grid, Icon, Label, Loader } from "semantic-ui-react";
@@ -100,9 +100,9 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
                       <abbr title={post.author}>
                         <p id="authorOverflow">{post.author}</p>
                       </abbr>{" "}
-                      <Link className="cardFontColor link" to={{ pathname: `/comment/post/${post.id}`, state: { post } }}>
+                      {/* <Link className="cardFontColor link" to={{ pathname: `/comment/post/${post.id}`, state: { post } }}>
                         {post.comment?.length ? post.comment.length + " comments" : "Discuss"}
-                      </Link>
+                      </Link> */}
                     </div>
                   </Card.Content>
                 </Card>
