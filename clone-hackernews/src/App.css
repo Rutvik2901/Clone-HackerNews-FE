@@ -2,6 +2,8 @@
   text-align: center;
   display: flex;
   flex-wrap: wrap;
+  background-color: rgb(15, 12, 41);
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -37,4 +39,11 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+body ::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
+}
+body ::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
 }

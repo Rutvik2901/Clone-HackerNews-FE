@@ -1,10 +1,89 @@
-.headerRoot {
-  display: flex;
-  flex: 100%;
-  justify-content: center;
-  margin: 0.875em 5px 0px 5px;
+#headerRoot {
+  background-color: rgb(15, 12, 41);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
-.buttons {
-  padding-right: 0px;
+.ui.secondary.menu .item.menuButton {
+  box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.20), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12);
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 30px !important;
+}
+.ui.secondary.menu .item.menuButton:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+.ui.secondary.menu .item.menuButton > Button {
+  background-color: transparent;
+  color: #6c757d;
+  font-size: 1.1em;
+  padding: 10px;
+}
+
+.ui[class*="left icon"].input>input {
+  background-color: rgba(255,255,255,0.1);
+  color: #6c757d;
+  box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.20), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12);
+}
+
+.ui.input {
+  color: #6c757d
+}
+
+.ui.input>input:focus{
+  border: none;
+}
+
+#url{
+  background: transparent;
+  color: rgb(108, 117, 125);
+  font-weight: bold;
+  box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.20), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12);
+}
+
+#title{
+  background: transparent;
+  color: rgb(108, 117, 125);
+  font-weight: bold;
+  box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.20), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12);
+}
+#author{
+  background: transparent;
+  color: rgb(108, 117, 125);
+  font-weight: bold;
+  box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.20), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12);
+}
+
+#description{
+  background: transparent;
+  font-weight: bold;
+  color: rgb(108, 117, 125);
+  box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.20), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12);
+}
+
+.ui.form .field>label{
+  color: rgba(76,117,242,0.8);
+}
+
+.blurring.dimmable>.dimmer {background-color: rgba(15, 12, 41,1);
+}
+
+.ui.secondary.menu .active.item.menuButton{
+  background-color: rgba(255,255,255,0.3);
+}
+
+.ui.input {
+  width: 100%;
+}
+
+.menuSearch {
+  width: 50%;
+}
+.ui.search {
+  width: 100%;
+}
+
+.ui.menu>.container, .ui.menu>.grid {
+  flex-wrap: wrap;
+  width: 100%;
 }

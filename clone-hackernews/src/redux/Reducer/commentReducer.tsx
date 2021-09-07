@@ -1,15 +1,15 @@
-import PostModel from "Constants/Models/PostModel";
+import CommentModel from "Constants/Models/CommentModel";
 
 const intiState = {
-  posts: Array<PostModel>(),
+  comments: Array<CommentModel>(),
 };
 
 export default function (state = intiState, action: any) {
   switch (action.type) {
-    case "ADD_POST":
+    case "ADD_COMMENT":
       return {
         ...state,
-        posts: action.payload,
+        comments: action.payload,
       };
 
     default:

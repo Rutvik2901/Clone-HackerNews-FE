@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Button, Card, Container, Dimmer, Icon, Label, Loader } from "semantic-ui-react";
+import "Components/ContainerComponent/Styles/index.css";
 import { baseUrl } from "Constants/baseUrl";
 import { millisToHoursAndMinutesAndSeconds } from "Constants/Methods/millisecondsToHoursMinutesSeconds";
 import PostModel from "Constants/Models/PostModel";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { addPosts } from "redux/actions";
 import store from "redux/store";
-import "Components/ContainerComponent/Styles/index.css";
+import { Button, Card, Dimmer, Grid, Icon, Label, Loader } from "semantic-ui-react";
 
 interface IContainerComponentProps {}
 interface IContainerComponentState {
@@ -39,7 +39,7 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
       .then((res) => store.dispatch(addPosts(res)));
   };
 
-  private likePost = (postId: any) => {
+  private likePost = (postId: string | undefined) => {
     fetch(baseUrl + "/like/post/" + postId, {
       method: "PUT",
       mode: "cors",
@@ -49,7 +49,7 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
     }).then(() => this.getPosts());
   };
 
-  private dislikePost = (postId: any) => {
+  private dislikePost = (postId: string | undefined) => {
     fetch(baseUrl + "/dislike/post/" + postId, {
       method: "PUT",
       mode: "cors",
@@ -69,41 +69,46 @@ class ContainerComponent extends Component<IContainerComponentProps, IContainerC
             <Loader size="large">Getting Data</Loader>
           </Dimmer>
         )}
-        <Container>
-          <Card.Group id="posts">
-            {posts &&
-              posts.map((post: PostModel) => (
+        <Grid id="posts" columns={3} container doubling stackable>
+          {posts.length &&
+            posts.map((post: PostModel) => (
+              <Grid.Column id="grid">
                 <Card raised className="postContent">
-                  <Card.Content className="cardContent" href={post.url}>
-                    <Card.Header>{post.title}</Card.Header>
-                    <Card.Meta>{post.url}</Card.Meta>
-                    <Card.Description className="description">{post.description}</Card.Description>
+                  <Card.Content id="cardContent">
+                    <Card.Header className="cardContent cardFontColor" href={post.url}>
+                      <abbr title={post.title}>{post.title}</abbr>
+                    </Card.Header>
+                    <Card.Header className="cardContent cardUrl cardFontColor" href={post.url}>
+                      {post.url}
+                    </Card.Header>
+                    <Card.Description className="description cardFontColor">{post.description}</Card.Description>
                   </Card.Content>
                   <Card.Content id="cardExtra" extra>
-                    <Button id="actionButtons" as="div">
-                      <Button onClick={() => this.likePost(post.id)} color="facebook">
-                        <Icon style={{ margin: 0 }} name="thumbs up" />
+                    <div id="actionButtons">
+                      <Button id="likeButton" onClick={() => this.likePost(post.id)} color="facebook">
+                        <Icon id="likeButtonColor" name="thumbs up" />
                       </Button>
 
-                      <Label id="votes" basic color="blue">
-                        {post.votes}
-                      </Label>
+                      <Label id="votes">{post.votes}</Label>
 
-                      <Button onClick={() => this.dislikePost(post.id)} color="facebook">
-                        <Icon name="thumbs down" style={{ margin: 0 }} />
+                      <Button id="dislikeButton" onClick={() => this.dislikePost(post.id)} color="facebook">
+                        <Icon id="dislikeButtonColor" name="thumbs down" />
                       </Button>
-                    </Button>
-                    <div>
-                      Created {millisToHoursAndMinutesAndSeconds(currentDate - Date.parse(post.createdAt ? post.createdAt : ""))} ago By {post.author.length ? post.author : "Annonymous"}{" "}
-                      <Link style={{ textDecoration: "underline" }} to={{ pathname: `/comment/post/${post.id}`, state: { post } }}>
-                        Discuss
+                    </div>
+                    <div className="cardFontColor">
+                      Created {millisToHoursAndMinutesAndSeconds(currentDate - Date.parse(post.createdAt ? post.createdAt : ""))} ago By{" "}
+                      <abbr title={post.author}>
+                        <p id="authorOverflow">{post.author}</p>
+                      </abbr>{" "}
+                      <Link className="cardFontColor link" to={{ pathname: `/comment/post/${post.id}`, state: { post } }}>
+                        {post.comment?.length ? post.comment.length + " comments" : "Discuss"}
                       </Link>
                     </div>
                   </Card.Content>
                 </Card>
-              ))}
-          </Card.Group>
-        </Container>
+              </Grid.Column>
+            ))}
+        </Grid>
       </>
     );
   }
