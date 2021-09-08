@@ -1,4 +1,5 @@
 import "Components/CommentComponent/Styles/index.css";
+import MessageComponent from "Components/MessageComponent";
 import ModalComponent from "Components/ModalComponent";
 import { baseUrl } from "Constants/baseUrl";
 import { millisToHoursAndMinutesAndSeconds } from "Constants/Methods/millisecondsToHoursMinutesSeconds";
@@ -6,7 +7,7 @@ import CommentModel from "Constants/Models/CommentModel";
 import { annonymous, commentAvatar } from "Constants/stringConstants";
 import React, { Component } from "react";
 import { RouteProps } from "react-router";
-import { Button, Comment, Container, Feed, Form, Header, TextArea } from "semantic-ui-react";
+import { Button, Comment, Container, Feed, Form, Header, Loader, TextArea } from "semantic-ui-react";
 
 interface parentChildStructure {
   [key: string]: Array<Array<{ comment: CommentModel; level: number }>>;
@@ -27,6 +28,9 @@ interface ICommentCompoentState {
   replyCommentValue: string;
   modal: boolean;
   formError: boolean;
+  isModalComment: boolean;
+  commentSubmit: boolean;
+  error: boolean;
 }
 
 class CommentComponent extends Component<ICommentCompoentProps & RouteProps, ICommentCompoentState> {
@@ -43,6 +47,9 @@ class CommentComponent extends Component<ICommentCompoentProps & RouteProps, ICo
       replyCommentValue: "",
       modal: false,
       formError: false,
+      isModalComment: false,
+      commentSubmit: false,
+      error: false,
     };
   }
   componentDidMount() {
@@ -74,6 +81,9 @@ class CommentComponent extends Component<ICommentCompoentProps & RouteProps, ICo
         formError: true,
       });
     } else {
+      this.setState({
+        isModalComment: true,
+      });
       fetch(baseUrl + "/comment/post/" + this.props.id + "/parent/" + replyCommentId, {
         method: "POST",
         mode: "cors",
@@ -93,10 +103,11 @@ class CommentComponent extends Component<ICommentCompoentProps & RouteProps, ICo
   };
 
   private submitComment = () => {
-    const { commentValue } = this.state;
+    const { commentValue, commentSubmit } = this.state;
     const { id } = this.props;
 
     if (commentValue.length !== 0) {
+      this.setState({ commentSubmit: true });
       fetch(baseUrl + "/comment/post/" + id, {
         method: "POST",
         mode: "cors",
@@ -104,12 +115,17 @@ class CommentComponent extends Component<ICommentCompoentProps & RouteProps, ICo
           "Content-Type": "application/json",
         },
         body: commentValue,
-      }).then(() => {
-        this.getComments();
-        this.setState({
-          commentValue: "",
+      })
+        .then(() => {
+          this.getComments();
+          this.setState({
+            commentValue: "",
+            commentSubmit: false,
+          });
+        })
+        .catch(() => {
+          this.setState({ commentSubmit: false, error: true });
         });
-      });
     }
   };
 
@@ -152,7 +168,7 @@ class CommentComponent extends Component<ICommentCompoentProps & RouteProps, ICo
     });
   };
   private closeModal = () => {
-    this.setState({ modal: false, formError: false, replyCommentValue: "" });
+    this.setState({ modal: false, formError: false, replyCommentValue: "", isModalComment: false });
   };
 
   render() {
@@ -160,6 +176,10 @@ class CommentComponent extends Component<ICommentCompoentProps & RouteProps, ICo
       commentValue,
       post: { post },
       formError,
+      modal,
+      isModalComment,
+      commentSubmit,
+      error,
     } = this.state;
 
     this.commentParentChildRelation();
@@ -168,7 +188,8 @@ class CommentComponent extends Component<ICommentCompoentProps & RouteProps, ICo
 
     return (
       <>
-        <ModalComponent content={"Comment"} open={this.state.modal} onSubmit={this.submitSubComments} modalClose={this.closeModal}>
+        {error && <MessageComponent messageHeader={"Failed to Post Comment"} messageBody={"Please try again later"} onDismiss={() => this.setState({ error: false })} />}
+        <ModalComponent isModalPost={isModalComment} content={"Comment"} open={modal} onSubmit={this.submitSubComments} modalClose={this.closeModal}>
           <Form.TextArea error={formError} id="comment" onChange={this.handleReplyCommentValueChange} placeholder="Enter Comment" />
         </ModalComponent>
         <Container id="container">
@@ -191,8 +212,8 @@ class CommentComponent extends Component<ICommentCompoentProps & RouteProps, ICo
             </Feed>
             <div className="textButton">
               <TextArea id="comment" error={formError} value={commentValue} className="textarea" onChange={this.handleCommentValueChange} placeholder="Write a Comment" />
-              <Button id="submitButton" onClick={this.submitComment}>
-                Submit
+              <Button disabled={commentSubmit} id="submitButton" onClick={this.submitComment}>
+                {commentSubmit ? <Loader size="tiny" inline="centered" active /> : "Submit"}
               </Button>
             </div>
           </div>

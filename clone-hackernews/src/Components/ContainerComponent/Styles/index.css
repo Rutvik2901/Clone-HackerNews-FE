@@ -1,7 +1,7 @@
 #posts {
     width: 100%;
-    margin-bottom: 0px;
-    margin-top: 10px;
+    padding-right: 1rem;
+    margin: 10px 0px 0px 0px;
 }
 
 #grid > div {
@@ -9,7 +9,7 @@
     box-shadow: none;
     margin-left: auto;
     margin-right: auto;
-    min-width: 90%;
+    min-width: 100%;
 }
 
 #cardExtra {
@@ -102,4 +102,12 @@ abbr[title] {
     white-space: nowrap;
     text-overflow: ellipsis;
     min-height: 10%;
+}
+
+.ui.grid>.column:not(.row), .ui.grid>.row>.column {
+    padding-right: 0px;
+}
+
+.ui.stackable.grid>.column:not(.row) {
+    padding: 1rem 0px 1rem 1rem !important;
 }

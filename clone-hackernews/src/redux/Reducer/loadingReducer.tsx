@@ -1,14 +1,18 @@
-const intiState = false;
+const initState = { searchLoader: false, postLoader: false };
 
-export default function (state = intiState, action: any) {
+export default function (state = initState, action: any) {
   switch (action.type) {
     case "POST_SEARCH":
-      state = true;
-      return state;
+      return { ...state, searchLoader: true };
 
     case "DONE_SEARCH":
-      state = false;
-      return state;
+      return { ...state, searchLoader: false };
+
+    case "GET_POST":
+      return { ...state, postLoader: true };
+
+    case "POST_GET":
+      return { ...state, postLoader: false };
 
     default:
       return state;

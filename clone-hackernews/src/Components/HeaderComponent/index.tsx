@@ -1,13 +1,14 @@
 import "Components/HeaderComponent/styles/index.css";
+import MessageComponent from "Components/MessageComponent";
 import ModalComponent from "Components/ModalComponent";
 import { baseUrl } from "Constants/baseUrl";
 import PostModel from "Constants/Models/PostModel";
 import { annonymous } from "Constants/stringConstants";
 import { debounce, toLower } from "lodash";
 import React, { Component } from "react";
-import { addPosts, doneSearch, postSearch } from "redux/actions";
+import { addPosts, doneSearch, getPost, postGet, postSearch } from "redux/actions";
 import store from "redux/store";
-import { Button, Container, Form, Icon, Menu, Search } from "semantic-ui-react";
+import { Button, Container, Form, Icon, Menu, Message, Search } from "semantic-ui-react";
 
 interface IHeaderComponentProps {}
 interface IHeaderComponentState {
@@ -18,6 +19,8 @@ interface IHeaderComponentState {
   activeItem: string;
   sortByAscLike: boolean;
   posts: Array<PostModel>;
+  isModalPost: boolean;
+  error: boolean;
 }
 
 class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentState> {
@@ -31,6 +34,8 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
       activeItem: "latest",
       sortByAscLike: false,
       posts: [],
+      isModalPost: false,
+      error: false,
     };
   }
 
@@ -56,16 +61,22 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
 
   searchLoading = () => {
     this.setState({
-      loading: store.getState().loading,
+      loading: store.getState().loading.searchLoader,
       posts: store.getState().posts.posts.content,
     });
   };
 
   private getPosts = () => {
+    store.dispatch(getPost());
     fetch(baseUrl + "/post")
       .then((res) => res.json())
       .then((res: Array<PostModel>) => {
         store.dispatch(addPosts(res));
+        store.dispatch(postGet());
+      })
+      .catch(() => {
+        this.setState({ error: true });
+        store.dispatch(postGet());
       });
   };
 
@@ -80,6 +91,9 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
         formError: true,
       });
     } else {
+      this.setState({
+        isModalPost: true,
+      });
       fetch(baseUrl + "/post", {
         method: "POST",
         mode: "cors",
@@ -87,10 +101,15 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
           "Content-Type": "application/json",
         },
         body: JSON.stringify(postModel),
-      }).then(() => {
-        this.getPosts();
-        this.closeModal();
-      });
+      })
+        .then(() => {
+          this.getPosts();
+          this.closeModal();
+        })
+        .catch(() => {
+          this.setState({ isModalPost: false, error: true });
+          this.closeModal();
+        });
     }
   };
 
@@ -100,17 +119,28 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
       .then((res) => {
         store.dispatch(doneSearch());
         store.dispatch(addPosts(res));
+      })
+      .catch(() => {
+        this.setState({ error: true });
+        store.dispatch(doneSearch());
       });
   }, 500);
 
   private getOldPosts = () => {
     const { activeItem } = this.state;
-    if (activeItem !== "old")
+    if (activeItem !== "old") {
+      store.dispatch(getPost());
       fetch(baseUrl + "/post?older=true")
         .then((res) => res.json())
         .then((res) => {
+          store.dispatch(postGet());
           store.dispatch(addPosts(res));
+        })
+        .catch(() => {
+          this.setState({ error: true });
+          store.dispatch(postGet());
         });
+    }
   };
 
   public searchFields = (data: any) => {
@@ -135,6 +165,7 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
       modal: false,
       formError: false,
       postModel: { title: "", description: "", author: "", url: "", votes: 0 },
+      isModalPost: false,
     });
   };
 
@@ -150,10 +181,16 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
   private getPostsByLikes = () => {
     const { activeItem } = this.state;
     if (activeItem !== "likes") {
+      store.dispatch(getPost());
       fetch(baseUrl + "/post?votes=true")
         .then((res) => res.json())
         .then((res) => {
+          store.dispatch(postGet());
           store.dispatch(addPosts(res));
+        })
+        .catch(() => {
+          this.setState({ error: true });
+          store.dispatch(postGet());
         });
     }
   };
@@ -175,77 +212,80 @@ class HeaderComponent extends Component<IHeaderComponentProps, IHeaderComponentS
   };
 
   render() {
-    const { loading, formError, activeItem, sortByAscLike } = this.state;
+    const { loading, formError, activeItem, sortByAscLike, isModalPost, error } = this.state;
     return (
-      <Menu id="headerRoot" fixed="top" secondary size="small">
-        <Container>
-          <Menu.Item
-            name="latest"
-            active={activeItem === "latest"}
-            className="menuButton"
-            onClick={() => {
-              this.getPosts();
-              this.handleMenuClick("latest");
-            }}
-          >
-            <Button>
-              <Button.Content>Latest</Button.Content>
-            </Button>
-          </Menu.Item>
-          <Menu.Item
-            name="old"
-            active={activeItem === "old"}
-            className="menuButton"
-            onClick={() => {
-              this.getOldPosts();
-              this.handleMenuClick("old");
-            }}
-          >
-            <Button>
-              <Button.Content>Old</Button.Content>
-            </Button>
-          </Menu.Item>
-          <Menu.Item
-            name="likes"
-            active={activeItem === "likes"}
-            className="menuButton"
-            onClick={() => {
-              this.getPostsByLikes();
-              this.handleMenuClick("likes");
-            }}
-          >
-            <Button>
-              <Button.Content>Likes</Button.Content>
-            </Button>
-            <Button onClick={this.sortByLike}>{sortByAscLike ? <Icon name="sort amount up"></Icon> : <Icon name="sort amount down"></Icon>}</Button>
-          </Menu.Item>
+      <>
+        {error && <MessageComponent messageHeader={"Error doing operation"} messageBody={"Please try again later"} onDismiss={() => this.setState({ error: false })} />}
+        <Menu id="headerRoot" fixed="top" secondary size="small">
+          <Container>
+            <Menu.Item
+              name="latest"
+              active={activeItem === "latest"}
+              className="menuButton"
+              onClick={() => {
+                this.getPosts();
+                this.handleMenuClick("latest");
+              }}
+            >
+              <Button>
+                <Button.Content>Latest</Button.Content>
+              </Button>
+            </Menu.Item>
+            <Menu.Item
+              name="old"
+              active={activeItem === "old"}
+              className="menuButton"
+              onClick={() => {
+                this.getOldPosts();
+                this.handleMenuClick("old");
+              }}
+            >
+              <Button>
+                <Button.Content>Old</Button.Content>
+              </Button>
+            </Menu.Item>
+            <Menu.Item
+              name="likes"
+              active={activeItem === "likes"}
+              className="menuButton"
+              onClick={() => {
+                this.getPostsByLikes();
+                this.handleMenuClick("likes");
+              }}
+            >
+              <Button>
+                <Button.Content>Likes</Button.Content>
+              </Button>
+              <Button onClick={this.sortByLike}>{sortByAscLike ? <Icon name="sort amount up"></Icon> : <Icon name="sort amount down"></Icon>}</Button>
+            </Menu.Item>
 
-          <Menu.Item position="right" className="menuSearch">
-            <Search
-              loading={loading}
-              input={{ icon: "search", iconPosition: "left" }}
-              open={false}
-              onSearchChange={(event: React.MouseEvent<HTMLElement, MouseEvent>, data) => this.searchFields(data)}
-            />
-          </Menu.Item>
-          <Menu.Item className="menuButton">
-            <Button onClick={this.openModal}>
-              <Button.Content>Create Post</Button.Content>
-            </Button>
+            <Menu.Item position="right" id="menuSearch">
+              <Search
+                loading={loading}
+                input={{ icon: "search", iconPosition: "left" }}
+                open={false}
+                onSearchChange={(event: React.MouseEvent<HTMLElement, MouseEvent>, data) => this.searchFields(data)}
+              />
+            </Menu.Item>
+            <Menu.Item className="menuButton">
+              <Button onClick={this.openModal}>
+                <Button.Content>Create Post</Button.Content>
+              </Button>
 
-            <ModalComponent content={"Post Details"} onSubmit={this.onSubmit} modalClose={this.closeModal} open={this.state.modal}>
-              <Form.Group widths={2}>
-                <Form.Input error={formError} id="title" onChange={this.handleValueChange} label="Title" placeholder="Enter Title" />
-                <Form.Input id="url" onChange={this.handleValueChange} label="Url" placeholder="Enter Url" />
-              </Form.Group>
-              <Form.Group widths={2}>
-                <Form.TextArea error={formError} id="description" onChange={this.handleValueChange} label="Description" placeholder="Enter Description" />
-                <Form.Input id="author" onChange={this.handleValueChange} label="Author" placeholder="Enter Author" />
-              </Form.Group>
-            </ModalComponent>
-          </Menu.Item>
-        </Container>
-      </Menu>
+              <ModalComponent isModalPost={isModalPost} content={"Post Details"} onSubmit={this.onSubmit} modalClose={this.closeModal} open={this.state.modal}>
+                <Form.Group widths={2}>
+                  <Form.Input error={formError} id="title" onChange={this.handleValueChange} label="Title" placeholder="Enter Title" />
+                  <Form.Input id="url" onChange={this.handleValueChange} label="Url" placeholder="Enter Url" />
+                </Form.Group>
+                <Form.Group widths={2}>
+                  <Form.TextArea error={formError} id="description" onChange={this.handleValueChange} label="Description" placeholder="Enter Description" />
+                  <Form.Input id="author" onChange={this.handleValueChange} label="Author" placeholder="Enter Author" />
+                </Form.Group>
+              </ModalComponent>
+            </Menu.Item>
+          </Container>
+        </Menu>
+      </>
     );
   }
 }
