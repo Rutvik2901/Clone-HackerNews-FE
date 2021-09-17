@@ -9,15 +9,21 @@
   box-shadow: 0px 6px 6px -3px rgb(0 0 0 / 0.20), 0px 10px 14px 1px rgb(0 0 0 / 0.14), 0px 4px 18px 3px rgb(0 0 0 / 0.12);
   background-color: rgba(255,255,255,0.1);
   border-radius: 30px !important;
+  padding: 0.5em 0.7em;
 }
 .ui.secondary.menu .item.menuButton:hover {
   background-color: rgba(255,255,255,0.1);
+  transform: scale(1,1);
 }
 .ui.secondary.menu .item.menuButton > Button {
   background-color: transparent;
   color: #6c757d;
   font-size: 1.1em;
   padding: 10px;
+}
+
+.ui.menu:not(.vertical) .right.item {
+  padding: 0px;
 }
 
 .ui[class*="left icon"].input>input {
@@ -76,14 +82,16 @@
   width: 100%;
 }
 
-.menuSearch {
-  width: 50%;
+#menuSearch {
+  width: 40%;
+  margin-right: auto;
 }
 .ui.search {
   width: 100%;
 }
 
-.ui.menu>.container, .ui.menu>.grid {
-  flex-wrap: wrap;
+.ui.menu>.container {
   width: 100%;
+  margin: 5px 0px;
+  overflow: auto;
 }

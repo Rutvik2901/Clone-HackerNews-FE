@@ -13,3 +13,11 @@ export const postSearch = () => ({
 export const doneSearch = () => ({
   type: "DONE_SEARCH",
 });
+
+export const getPost = () => ({
+  type: "GET_POST",
+});
+
+export const postGet = () => ({
+  type: "POST_GET",
+});

@@ -1,7 +1,5 @@
 .App {
   text-align: center;
-  display: flex;
-  flex-wrap: wrap;
   background-color: rgb(15, 12, 41);
   min-height: 100vh;
 }
